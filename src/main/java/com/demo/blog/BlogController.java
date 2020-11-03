@@ -58,6 +58,11 @@ public class BlogController extends Controller {
 	public void declare(){
 		render("declare.html");
 	}
+
+	@Before(BlogValidator.class)
+	public void map(){
+		render("map.html");
+	}
 }
 
 

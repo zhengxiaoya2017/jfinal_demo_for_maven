@@ -28,7 +28,7 @@ table tr.highlight{background-color:#c90}
 .operation_td a{padding:0 5px}
 .manage_head{margin-bottom:5px}
 .manage_head .manage_logo{font-size:18px;line-height:30px;border-top:8px solid #040;border-left:8px solid #040;border-right:8px solid #040;padding-left:10px}
-#nav{border-top:8px solid #040;padding:1px 0 0}
+#nav{padding:1px 0 0}
 #nav ul{white-space:nowrap;font-family:arial, verdana, sans-serif;font-size:11px;list-style:none;line-height:1.2;overflow:hidden;_zoom:1;margin:0 0 2px;padding:0}
 #nav ul li{float:left;margin-bottom:1px}
 #nav ul li a{float:left;color:#FFF;background:#040 url(../img/left2.gif) no-repeat left bottom;text-decoration:none;letter-spacing:1px;margin:0 2px 0 0;padding:0 0 0 2px}

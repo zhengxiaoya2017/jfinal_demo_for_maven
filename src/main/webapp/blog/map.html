@@ -1,0 +1,87 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>根据地址查询经纬度</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+　　 <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.3"></script>
+　　</head>
+<body style="background:#f9f9f9; margin:0 auto">
+    <div style="width:730px;margin:30px auto;">   
+        要查询的地址：<input id="address" type="text" value="郑州市金水区基运投资大厦" style="margin-right:50px;"/>
+			<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+
+        查询结果(经纬度)：<input id="coordinate" type="text" />
+        <input type="button" value="查询" onclick="searchByStationName();"/>
+        <div id="container" style="position:absolute; margin-top:30px; width:730px; height:590px; top:50; border:1px solid gray; overflow:hidden;"></div>
+		<div id="text_" value="详细信息"></div>
+    </div>
+</body>
+<script type="text/javascript">
+    var map = new BMap.Map("container");
+    map.centerAndZoom("郑州市", 12);
+    map.enableScrollWheelZoom();    //启用滚轮放大缩小，默认禁用
+    map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+
+    map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+    map.addControl(new BMap.OverviewMapControl()); //添加默认缩略地图控件
+    //map.addControl(new BMap.OverviewMapControl({ isOpen: true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT }));   //右下角，打开
+
+    var localSearch = new BMap.LocalSearch(map);
+    localSearch.enableAutoViewport(); //允许自动调节窗体大小
+function searchByStationName() {
+    map.clearOverlays();//清空原来的标注
+    var keyword = document.getElementById("address").value;
+    localSearch.setSearchCompleteCallback(function (searchResult) {
+        var poi = searchResult.getPoi(0);
+		console.log(poi);
+		console.log("获取到的详细地址为:"+poi.province+poi.city+poi.address);
+        document.getElementById("coordinate").value = poi.point.lng + "," + poi.point.lat;
+        map.centerAndZoom(poi.point, 13);
+        var marker = new BMap.Marker(new BMap.Point(poi.point.lng, poi.point.lat));  // 创建标注，为要查询的地方对应的经纬度
+        map.addOverlay(marker);
+	    console.log("经度为:"+poi.point.lng+";纬度为:"+poi.point.lat);
+        var content = document.getElementById("text_").value + "<br/><br/>经度：" + poi.point.lng + "<br/>纬度：" + poi.point.lat;
+        var infoWindow = new BMap.InfoWindow("<p style='font-size:14px;'>" + content + "</p>");
+        marker.addEventListener("click", function () { this.openInfoWindow(infoWindow); });
+        // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+    });
+    localSearch.search(keyword);
+	
+	
+	
+	
+	//
+	// 百度地图API功能
+		function G(id) {
+			return document.getElementById(id);
+		}
+	
+		var ac = new BMap.Autocomplete({"input" : "address"});
+	
+		ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+		var str = "";
+			var _value = e.fromitem.value;
+			var value = "";
+			if (e.fromitem.index > -1) {
+				value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+			}    
+			str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+			value = "";
+			if (e.toitem.index > -1) {
+				_value = e.toitem.value;
+				value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+			}    
+			str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+			G("searchResultPanel").innerHTML = str;
+		});
+	
+		var myValue;
+		ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+		var _value = e.item.value;
+			myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+			G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+		});
+	
+	
+} 
+</script>
+</html>
