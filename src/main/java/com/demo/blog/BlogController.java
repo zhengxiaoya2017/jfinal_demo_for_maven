@@ -63,6 +63,10 @@ public class BlogController extends Controller {
 	public void map(){
 		render("map.html");
 	}
+
+	public void version(){
+		render("version.html");
+	}
 }
 
 
